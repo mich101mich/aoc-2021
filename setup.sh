@@ -36,7 +36,7 @@ fn main() {
 
 touch src/input/$DAY.txt
 
-if [ -f cmd.exe ]; then
+if [ -d /mnt/c ]; then
     cmd.exe /c code src/days/day_$DAY.rs src/input/$DAY.txt
 else
     code src/days/day_$DAY.rs src/input/$DAY.txt
