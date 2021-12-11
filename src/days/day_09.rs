@@ -5,7 +5,7 @@ pub fn run() {
     #[allow(unused_variables)]
     let input = include_str!("../input/09.txt");
 
-    let grid = char_grid(input);
+    let grid = digit_grid(input);
     let neighborhood = grid.manhattan();
 
     let mut low_points = vec![];
@@ -25,7 +25,7 @@ pub fn run() {
             let v = grid[pos];
             for neighbor in neighborhood.get_all_neighbors(pos) {
                 let neigh = grid[neighbor];
-                if neigh != '9' && neigh > v && basin.insert(neighbor) {
+                if neigh != 9 && neigh > v && basin.insert(neighbor) {
                     queue.push(neighbor);
                 }
             }
