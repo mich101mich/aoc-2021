@@ -30,7 +30,7 @@ pub fn run() {
             }
         }
     }
-    let count = grid.grid_iter().filter(|v| **v >= 2).count();
+    let count = grid.count_with(|v| *v >= 2);
     pv!(count);
 }
 
@@ -57,6 +57,6 @@ pub fn part_one() {
             }
         }
     }
-    let count = grid.grid_iter().filter(|v| **v >= 2).count();
+    let count = grid.count_with(|v| *v >= 2);
     pv!(count);
 }
