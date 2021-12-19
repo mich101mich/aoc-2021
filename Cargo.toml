@@ -13,3 +13,4 @@ sscanf = { git = "https://github.com/mich101mich/sscanf" }
 permutohedron = "0.2"
 num = "0.4"
 nom = "7.1"
+cgmath = "0.18"
