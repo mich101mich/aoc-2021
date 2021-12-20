@@ -61,16 +61,6 @@ fn find_matchup(
     known_beacons: &HashSet<Vec3>,
     all_rotations: &[Mat3],
 ) -> Option<Pose> {
-    let overlap = a
-        .dist
-        .iter()
-        .filter(|(d, _)| b.dist.contains_key(d))
-        .map(|(_, v)| v.len())
-        .sum::<usize>();
-    if overlap < 12 {
-        return None;
-    }
-
     let pos_b = b.pose?.0;
 
     let iter = a
@@ -101,7 +91,6 @@ fn find_matchup(
                         continue 'outer;
                     }
                 }
-                pv!(overlap);
                 return Some((f2i(pos), *rot));
             }
         }
