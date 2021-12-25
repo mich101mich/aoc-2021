@@ -8,52 +8,49 @@ pub fn run() {
     let w = input.lines().next().unwrap().len();
     let h = input.lines().count();
 
-    let mut cucumbers = input
-        .lines()
-        .enumerate()
-        .flat_map(|(y, l)| {
-            l.chars()
-                .enumerate()
-                .filter(|(_, c)| *c != '.')
-                .map(move |(x, c)| ((x, y), Dir::from(c)))
-        })
-        .to_map();
+    let mut east = HashSet::new();
+    let mut south = HashSet::new();
+    for (y, line) in input.lines().enumerate() {
+        for (x, c) in line.chars().enumerate() {
+            if c == '>' {
+                east.insert((x, y));
+            } else if c == 'v' {
+                south.insert((x, y));
+            }
+        }
+    }
 
+    let mut new_east = HashSet::new();
+    let mut new_south = HashSet::new();
     for step in 1.. {
         let mut moved = 0;
-        let mut new_cumbers = HashMap::new();
-        for (p, d) in cucumbers.iter() {
-            if *d == Dir::Right {
-                let mut new_p = *p + *d;
-                new_p.0 %= w;
-                new_p.1 %= h;
-                if !cucumbers.contains_key(&new_p) {
-                    new_cumbers.insert(new_p, *d);
-                    moved += 1;
-                } else {
-                    new_cumbers.insert(*p, *d);
-                }
+        new_east.clear();
+        for p in east.iter() {
+            let mut new_p = *p + Dir::Right;
+            new_p.0 %= w;
+            new_p.1 %= h;
+            if !east.contains(&new_p) && !south.contains(&new_p) {
+                new_east.insert(new_p);
+                moved += 1;
             } else {
-                new_cumbers.insert(*p, *d);
+                new_east.insert(*p);
             }
         }
-        cucumbers = std::mem::take(&mut new_cumbers);
-        for (p, d) in cucumbers.iter() {
-            if *d == Dir::Down {
-                let mut new_p = *p + *d;
-                new_p.0 %= w;
-                new_p.1 %= h;
-                if !cucumbers.contains_key(&new_p) {
-                    new_cumbers.insert(new_p, *d);
-                    moved += 1;
-                } else {
-                    new_cumbers.insert(*p, *d);
-                }
+        std::mem::swap(&mut east, &mut new_east);
+
+        new_south.clear();
+        for p in south.iter() {
+            let mut new_p = *p + Dir::Down;
+            new_p.0 %= w;
+            new_p.1 %= h;
+            if !south.contains(&new_p) && !east.contains(&new_p) {
+                new_south.insert(new_p);
+                moved += 1;
             } else {
-                new_cumbers.insert(*p, *d);
+                new_south.insert(*p);
             }
         }
-        cucumbers = new_cumbers;
+        std::mem::swap(&mut south, &mut new_south);
 
         if moved == 0 {
             pv!(step);
